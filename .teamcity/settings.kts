@@ -31,10 +31,32 @@ project {
     vcsRoot(HttpsGithubComChubatovaTigerRepo3)
 
     buildType(Build1)
+buildType(Build2)
 }
 
 object Build1 : BuildType({
     name = "build1"
+
+    vcs {
+        root(DslContext.settingsRoot)
+        root(HttpsGithubComChubatovaTigerRepo3, "+:. => repo3")
+    }
+
+    steps {
+        script {
+            id = "simpleRunner"
+            scriptContent = "ls repo3"
+        }
+    }
+   dependencies {
+        snapshot(Build2) {
+            reuseBuilds = ReuseBuilds.NO
+        }
+    }
+})
+
+object Build2 : BuildType({
+    name = "build2"
 
     vcs {
         root(DslContext.settingsRoot)
